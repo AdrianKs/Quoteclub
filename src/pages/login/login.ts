@@ -16,6 +16,7 @@ import {ResetPassword} from "../reset-password/reset-password";
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
+  providers: [AuthData]
 })
 export class Login {
 
@@ -50,7 +51,6 @@ export class Login {
       console.log(this.loginForm.value);
     } else {
       this.authData.loginUser(this.loginForm.value.email, this.loginForm.value.password).then( authData => {
-        this.authData.changePushid(authData.uid);
         this.navCtrl.setRoot(Game);
         this.menuCtrl.enable(true, 'mainMenu');
       }, error => {

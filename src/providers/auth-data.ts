@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import firebase from 'firebase';
-import {Utilities} from '../app/utilities';
 import {MenuController} from "ionic-angular";
 /*
   Generated class for the AuthData provider.
@@ -14,38 +13,26 @@ export class AuthData {
   public fireAuth: any;
   public userProfile: any;
 
-  constructor(public utilities: Utilities, public menuCtrl: MenuController) {
+  constructor(public menuCtrl: MenuController) {
     this.fireAuth = firebase.auth();
-    this.userProfile = firebase.database().ref('clubs/12/players');
+    this.userProfile = firebase.database().ref('user');
   }
 
   loginUser(email: string, password: string): any {
     return this.fireAuth.signInWithEmailAndPassword(email, password);
   }
 
-  signupUser(email: string, password: string, firstname: string, lastname: string, birthday: string, gender: string, team: string, pushid: string): any {
+  signupUser(email: string, password: string, username: string): any {
     return this.fireAuth.createUserWithEmailAndPassword(email, password)
       .then((newUser) => {
         this.userProfile.child(newUser.uid).set({
           email: email,
-          firstname: firstname,
-          lastname: lastname,
-          birthday: birthday,
-          gender: gender,
-          team: team,
-          state: 0,
-          isPlayer: true,
-          isTrainer: false,
-          picUrl: "",
+          username: username,
+          isAdmin: false,
+          isPro: false,
           pushid: {},
-          isDefault: false,
-          helpCounter: 0
+          score: 0
           });
-          firebase.database().ref('clubs/12/players/' + newUser.uid + '/pushid/' + pushid).set(
-            true
-          );
-        this.utilities.user = newUser;
-        newUser.sendEmailVerification();
       });
   }
 
@@ -56,7 +43,7 @@ export class AuthData {
   changePassword(newPassword: string, passwordOld: string): any{
     let that = this;
     let credentials = firebase.auth.EmailAuthProvider.credential(
-      this.utilities.userData.email,
+      this.fireAuth.currentUser.email,
       passwordOld
     );
 
@@ -76,7 +63,7 @@ export class AuthData {
   deleteUser(password: string): any{
     let that = this;
     let credentials = firebase.auth.EmailAuthProvider.credential(
-      this.utilities.userData.email,
+      this.fireAuth.currentUser.email,
       password
     );
 
@@ -89,27 +76,10 @@ export class AuthData {
     });
   }
 
-  changePushid(userid: string): any {
-    window["plugins"].OneSignal.getIds(ids => {
-      console.log('getIds: ' + JSON.stringify(ids));
-      //alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
-      return firebase.database().ref('clubs/12/players/' + userid + '/pushid/' + ids.userId).set(
-        true
-      );
-    });
-
-  }
-
   logoutUser(): any {
     this.menuCtrl.close('mainMenu');
     console.log("nach menu close");
-    window["plugins"].OneSignal.getIds(ids => {
-      console.log('getIds: ' + JSON.stringify(ids));
-      firebase.database().ref('clubs/12/players/' + this.utilities.user.uid + '/pushid').child(ids.userId).remove().then(() => {
-        console.log("in logout promise");
-          return this.fireAuth.signOut();
-      })
-    })
+    return this.fireAuth.signOut();
   }
 
   getErrorMessage(error): string {

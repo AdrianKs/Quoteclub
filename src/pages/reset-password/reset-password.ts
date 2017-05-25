@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {AuthData} from "../../providers/auth-data";
 
 /**
  * Generated class for the ResetPassword page.
@@ -11,6 +12,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 @Component({
   selector: 'page-reset-password',
   templateUrl: 'reset-password.html',
+  providers: [AuthData]
 })
 export class ResetPassword {
 

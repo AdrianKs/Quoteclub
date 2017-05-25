@@ -10,11 +10,14 @@ import {Settings} from "../pages/settings/settings";
 import {SubmitQuote} from "../pages/submit-quote/submit-quote";
 import firebase from 'firebase';
 import { firebaseConfig } from "./firebaseAppData";
+import {Login} from "../pages/login/login";
+import {AuthData} from "../providers/auth-data";
 
 firebase.initializeApp(firebaseConfig);
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [AuthData]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -23,8 +26,26 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public authData: AuthData) {
     this.initializeApp();
+
+    firebase.auth().onAuthStateChanged((user) => {
+      //utilities.user = user;
+
+      if (user != undefined) {
+        //Speicher hier userdaten in Utilities oder so
+      }
+      if (!user) {
+        //Setze loggedin auf false und lösche den eingeloggten Spieler in utilities
+        //utilities.loggedIn = false;
+        //utilities.user = {};
+        this.rootPage = Login;
+      } else {
+        if (this.nav.getActive() == undefined) {
+          this.rootPage = Game;
+        }
+      }
+    });
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -45,6 +66,11 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  logout() {
+    this.authData.logoutUser();
+    this.nav.setRoot(Login);
   }
 
   openPage(page) {

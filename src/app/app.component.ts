@@ -2,9 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import {About} from "../pages/about/about";
+import {ApproveQuotes} from "../pages/approve-quotes/approve-quotes";
+import {Game} from "../pages/game/game";
+import {Highscore} from "../pages/highscore/highscore";
+import {Settings} from "../pages/settings/settings";
+import {SubmitQuote} from "../pages/submit-quote/submit-quote";
 
 @Component({
   templateUrl: 'app.html'
@@ -12,7 +15,7 @@ import { ListPage } from '../pages/list/list';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = Game;
 
   pages: Array<{title: string, component: any}>;
 
@@ -21,8 +24,12 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'About', component: About },
+      { title: 'Approve Quotes', component: ApproveQuotes },
+      { title: 'Game', component: Game },
+      { title: 'Highscore', component: Highscore },
+      { title: 'Settings', component: Settings },
+      { title: 'Submit Quote', component: SubmitQuote },
     ];
 
   }

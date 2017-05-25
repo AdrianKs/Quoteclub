@@ -8,6 +8,10 @@ import {Game} from "../pages/game/game";
 import {Highscore} from "../pages/highscore/highscore";
 import {Settings} from "../pages/settings/settings";
 import {SubmitQuote} from "../pages/submit-quote/submit-quote";
+import firebase from 'firebase';
+import { firebaseConfig } from "./firebaseAppData";
+
+firebase.initializeApp(firebaseConfig);
 
 @Component({
   templateUrl: 'app.html'

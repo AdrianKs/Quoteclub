@@ -103,14 +103,14 @@ export class SubmitQuote {
 
     if (this.authorChoice == "enter") {
       if (this.trueOrFalse == "" || this.category == 0 || this.enteredAuthor == ""
-        || this.quote == "" || this.context == "" || this.source == "" || this.date == "") {
+        || this.quote == "") {
         return true;
       }else{
         return false;
       }
     } else if (this.authorChoice == "choose") {
       if (this.trueOrFalse == "" || this.category == 0 || this.author == ""
-        || this.quote == "" || this.context == "" || this.source == "" || this.date == "") {
+        || this.quote == "") {
         return true;
       }else{
         return false;

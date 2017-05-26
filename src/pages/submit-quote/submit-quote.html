@@ -86,17 +86,17 @@
       <ion-textarea placeholder="Zitat eingeben" rows="3" [(ngModel)]="quote"></ion-textarea>
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="trueOrFalse=='true'">
       <ion-label>Kontext</ion-label>
       <ion-textarea placeholder="Beschreibe den Kontext des Zitats" [(ngModel)]="context" rows="3"></ion-textarea>
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="trueOrFalse=='true'">
       <ion-label>Quelle</ion-label>
       <ion-input placeholder="URL bevorzugt" [(ngModel)]="source"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="trueOrFalse=='true'">
       <ion-label>Datum</ion-label>
       <ion-input placeholder="Genaues oder ungefähr" [(ngModel)]="date"></ion-input>
     </ion-item>

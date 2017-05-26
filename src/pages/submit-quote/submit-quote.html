@@ -51,17 +51,44 @@
   </ion-list>
 
   <!-- Textbox zum Input des Autors -->
+
   <ion-list>
-    <ion-list-header>Zitatinformationen</ion-list-header>
-    <ion-item>
-      <ion-label>Autor</ion-label>
+    <ion-list-header>Autorinformationen</ion-list-header>
+    <ion-list radio-group [(ngModel)]="authorChoice">
+      <ion-item>
+        <ion-label>Autor auswählen</ion-label>
+        <ion-radio value="choose"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>Autor eintragen</ion-label>
+        <ion-radio value="enter"></ion-radio>
+      </ion-item>
+    </ion-list>
+    <ion-list>
+    <ion-item *ngIf="authorChoice=='choose'">
+      <ion-label>Autor auswählen</ion-label>
       <ion-select [(ngModel)]="author" placeholder="Auswählen">
         <ion-option *ngFor="let author of authorData" value={{author.id}}>{{author.name}}</ion-option>
       </ion-select>
     </ion-item>
+    <ion-item *ngIf="authorChoice=='enter'">
+      <ion-label>Autor eintragen</ion-label>
+      <ion-input placeholder="..." [(ngModel)]="enteredAuthor"></ion-input>
+    </ion-item>
+    </ion-list>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>Zitatinformationen</ion-list-header>
+  
     <ion-item>
       <ion-label>Zitat</ion-label>
       <ion-textarea placeholder="Zitat eingeben" rows="3" [(ngModel)]="quote"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Kontext</ion-label>
+      <ion-textarea placeholder="Beschreibe den Kontext des Zitats" [(ngModel)]="context" rows="3"></ion-textarea>
     </ion-item>
 
     <ion-item>

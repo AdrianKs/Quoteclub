@@ -11,6 +11,7 @@ import { Observable, Subscription } from 'rxjs/Rx';
 export class Game implements OnInit, OnDestroy {
   ready = false;
   attendants = [];
+  cardCursor: number = 0;
   cardDirection = "xy";
   cardOverlay: any = {
     like: {
@@ -33,15 +34,14 @@ export class Game implements OnInit, OnDestroy {
   tickerFunc(tick) {
     this.loadProgress = this.loadProgress - 6.66;
     this.ticks = tick
-    if(this.loadProgress <= 6.67){
+    if (this.loadProgress <= 6.67) {
       this.sub.unsubscribe();
+      console.log("Destroy timer");
     }
-    console.log(this.loadProgress);
   }
 
   ngOnDestroy() {
     console.log("Destroy timer");
-    // unsubscribe here
     this.sub.unsubscribe();
   }
 
@@ -56,8 +56,24 @@ export class Game implements OnInit, OnDestroy {
     this.ready = true;
   }
 
+  like(like) {
+    var self = this;
+    if (this.attendants.length > 0) {
+      self.attendants[this.cardCursor++].likeEvent.emit({ like });
+      // DO STUFF WITH YOUR CARD
+      //this.tinderCardLogs.push("callLike(" + JSON.stringify({ like }) + ")");
+      //this.scrollToBottom(this.tinderCardLogContainer);
+      this.sub.unsubscribe();
+      this.loadProgress = 100;
+      this.sub = this.timer.subscribe(t => this.tickerFunc(t));
+    }
+  }
+
   onCardInteract(event) {
     console.log(event);
+    this.sub.unsubscribe();
+    this.loadProgress = 100;
+    this.sub = this.timer.subscribe(t => this.tickerFunc(t));
   }
 
   ionViewDidLoad() {

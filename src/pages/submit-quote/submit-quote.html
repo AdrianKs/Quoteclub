@@ -7,12 +7,72 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>SubmitQuote</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Zitat einreichen</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <!-- Radio Buttons für Wahrheit oder Falschheit des Zitat-->
+  <ion-list radio-group [(ngModel)]="trueOrFalse">
+    <ion-list-header>Echtheit des Zitats</ion-list-header>
+    <ion-item>
+      <ion-label>
+        Wahr
+      </ion-label>
+      <ion-radio value="true"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Falsch
+      </ion-label>
+      <ion-radio value="false"></ion-radio>
+    </ion-item>
+  </ion-list>
 
+  <!-- Select Box für die Kategorien -->
+  <ion-list>
+    <ion-list-header>Kategorie des Zitats</ion-list-header>
+    <ion-item>
+      <ion-label>Kategorie</ion-label>
+      <ion-select [(ngModel)]="category" placeholder="Auswählen">
+        <ion-option value="1">Politik</ion-option>
+        <ion-option value="2">Kultur</ion-option>
+        <ion-option value="3">Sport</ion-option>
+        <ion-option value="4">Bibel</ion-option>
+        <ion-option value="5">Promis</ion-option>
+        <ion-option value="6">Wissenschaft</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <!-- Textbox zum Input des Autors -->
+  <ion-list>
+    <ion-list-header>Zitatinformationen</ion-list-header>
+    <ion-item>
+      <ion-label>Autor</ion-label>
+      <ion-select [(ngModel)]="author" placeholder="Auswählen">
+        <ion-option *ngFor="let author of authorData" value={{author.id}}>{{author.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Zitat</ion-label>
+      <ion-textarea placeholder="Zitat eingeben" rows="3" [(ngModel)]="quote"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Quelle</ion-label>
+      <ion-input placeholder="URL bevorzugt" [(ngModel)]="source"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Datum</ion-label>
+      <ion-input placeholder="Genaues oder ungefähr" [(ngModel)]="date"></ion-input>
+    </ion-item>
+  </ion-list>
+  <button ion-button block outline type="button" color="primary" (click)="catchEvent();">Einreichen</button>
 </ion-content>

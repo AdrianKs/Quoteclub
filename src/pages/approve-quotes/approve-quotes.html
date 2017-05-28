@@ -10,12 +10,51 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>ApproveQuotes</ion-title>
+    <ion-title>Manage Quotes</ion-title>
   </ion-navbar>
-
+  <ion-toolbar no-border-bottom>
+    <ion-segment [(ngModel)]="editStatus">
+      <ion-segment-button value="submitted">
+        Submitted
+      </ion-segment-button>
+      <ion-segment-button value="reported">
+        Reported
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-
 <ion-content padding>
+  <div [ngSwitch]="editStatus">
+    <ion-list *ngSwitchCase="'submitted'">
+      <div *ngFor="let quoteItem of dataSubmitted">
+        <ion-item (click)="openDetails($event, quoteItem)" class="less-label-margin">
+          <div class="itemLeft">
+            <div class="mainDetails">{{quoteItem.quote}}</div>
+            <div class="secondaryDetails">{{ quoteItem.author }}</div>
+            <div class="secondaryDetails">{{ quoteItem.category }}</div>
+          </div>
+        </ion-item>
+      </div>
+    </ion-list>
 
+    <ion-list *ngSwitchCase="'reported'">
+      <div *ngFor="let quoteItem of dataReported">
+        <ion-item (click)="openDetails($event, quoteItem)" class="less-label-margin">
+          <div class="itemLeft">
+            <div class="mainDetails">{{ quoteItem.quote }}</div>
+            <div class="secondaryDetails">{{ quoteItem.reason }}</div>
+            <div class="secondaryDetails">{{ quoteItem.user }}</div>
+          </div>
+        </ion-item>
+      </div>
+    </ion-list>
+  </div>
+
+  <ion-refresher (ionRefresh)="loadData(true, event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 </ion-content>
+
+
+

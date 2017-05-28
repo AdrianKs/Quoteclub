@@ -17,5 +17,21 @@
 
 
 <ion-content padding>
+  <ion-list>
+    <div *ngFor="let userItem of dataUser">
+      <ion-item (click)="openDetails($event, gameItem)" class="less-label-margin">
+        <div class="itemLeft">
+          <img src="this.src='assets/icon/favicon.ico'"/>
+        </div>
+        <div class="itemRight">
+          <div class="mainDetails">{{userItem.username}}</div>
+          <div class="secondaryDetails">Punktzahl: {{ userItem.score }}</div>
+        </div>
+      </ion-item>
+    </div>
+  </ion-list>
 
+  <ion-refresher (ionRefresh)="loadData(true, event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 </ion-content>

@@ -27,31 +27,54 @@
 <ion-content padding>
   <div [ngSwitch]="editStatus">
     <ion-list *ngSwitchCase="'submitted'">
-      <div *ngFor="let quoteItem of dataSubmitted">
-        <ion-item (click)="openDetails($event, quoteItem)" class="less-label-margin">
-          <div class="itemLeft">
-            <div class="mainDetails">{{quoteItem.quote}}</div>
-            <div class="secondaryDetails">{{ quoteItem.author }}</div>
-            <div class="secondaryDetails">{{ quoteItem.category }}</div>
-          </div>
-        </ion-item>
+      <div *ngFor="let submittedItem of dataSubmitted">
+        <div *ngIf="submittedItem.deleted == false">
+          <ion-item-sliding #item>
+            <ion-item (click)="openDetails($event, submittedItem, null)" class="less-label-margin">
+              <div class="itemLeft">
+                <div class="mainDetails">"{{submittedItem.quote}}"</div>
+                <div class="secondaryDetails">Autor: {{ submittedItem.author }}</div>
+                <div *ngFor="let categoryItem of dataCategory">
+                  <div *ngIf="categoryItem.id == submittedItem.category" class="secondaryDetails">Kategorie: {{ categoryItem.name }}</div>
+                </div>
+                <div *ngFor="let userItem of dataUser">
+                  <div *ngIf="userItem.id == submittedItem.user" class="secondaryDetails">Hochgeladen von: {{userItem.username}}</div>
+                </div>
+              </div>
+            </ion-item>
+            <ion-item-options side="right">
+              <button ion-button (click)="delete(submittedItem)">Löschen</button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </div>
       </div>
     </ion-list>
 
     <ion-list *ngSwitchCase="'reported'">
-      <div *ngFor="let quoteItem of dataReported">
-        <ion-item (click)="openDetails($event, quoteItem)" class="less-label-margin">
-          <div class="itemLeft">
-            <div class="mainDetails">{{ quoteItem.quote }}</div>
-            <div class="secondaryDetails">{{ quoteItem.reason }}</div>
-            <div class="secondaryDetails">{{ quoteItem.user }}</div>
-          </div>
-        </ion-item>
+      <div *ngFor="let reportedItem of dataReported">
+        <div *ngIf="reportedItem.deleted == false">
+          <ion-item-sliding #item>
+            <ion-item (click)="openDetails($event, null, reportedItem)" class="less-label-margin">
+              <div class="itemLeft">
+                <div *ngFor="let quoteItem of dataQuotes">
+                  <div *ngIf="quoteItem.id == reportedItem.quote" class="mainDetails">"{{ quoteItem.quote }}"</div>
+                </div>
+                <div class="secondaryDetails">Begründung: {{ reportedItem.reason }}</div>
+                <div *ngFor="let userItem of dataUser">
+                  <div *ngIf="userItem.id == reportedItem.user" class="secondaryDetails">Gemeldet von: {{userItem.username}}</div>
+                </div>
+              </div>
+            </ion-item>
+            <ion-item-options side="right">
+              <button ion-button (click)="delete(reportedItem)">Löschen</button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </div>
       </div>
     </ion-list>
   </div>
 
-  <ion-refresher (ionRefresh)="loadData(true, event)">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 </ion-content>

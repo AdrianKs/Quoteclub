@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
-import { UserProvider } from '../../providers/user-provider';
+import { QuoteManagementProvider } from '../../providers/quoteManagement-provider';
 
 /**
  * Generated class for the Highscore page.
@@ -12,7 +12,7 @@ import { UserProvider } from '../../providers/user-provider';
 @Component({
   selector: 'page-highscore',
   templateUrl: 'highscore.html',
-  providers: [UserProvider]
+  providers: [QuoteManagementProvider]
 })
 export class Highscore {
 
@@ -20,10 +20,12 @@ export class Highscore {
     this.loadData(true, null);
   }
 
+  currentUser: String = "wdJTAtwZE2QHMWocLwaKDnyW8YF2";
   dataUser: any;
   loading: any;
+  rank: number = 0;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userProvider: UserProvider, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private quoteManagementProvider: QuoteManagementProvider, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
   }
 
   ionViewDidLoad() {
@@ -34,8 +36,14 @@ export class Highscore {
     if (showLoading) {
       this.createAndShowLoading();
     }
-    this.userProvider.setUser().then((data) => {
-      this.dataUser = this.userProvider.dataUser;
+    this.quoteManagementProvider.setUser().then((data) => {
+      this.dataUser = this.quoteManagementProvider.dataUser;
+      let counter = 1;
+      for (let i in this.dataUser){
+        this.dataUser[i].rank = counter;
+        counter++;
+      }
+      console.log(this.dataUser);
       if (showLoading) {
         this.loading.dismiss().catch((error) => console.log(error));
       }

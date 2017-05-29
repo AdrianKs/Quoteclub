@@ -9,12 +9,22 @@ import { IonicPage, NavController, NavParams, AlertController} from 'ionic-angul
 })
 export class QuoteDetail {
 
-  quoteItem: any;
+  submittedItem: any;
+  reportedItem: any;
+  dataCategory: any;
+  dataUser: any;
+  dataAuthor: any;
+  dataQuotes: any;
 
 
 
   constructor(public navCtrl: NavController, public navP: NavParams, private alertCtrl: AlertController) {
-      this.quoteItem = navP.get('quoteItem');
+      this.submittedItem = navP.get('submittedItem');
+      this.reportedItem = navP.get('reportedItem');
+      this.dataCategory = navP.get('dataCategory');
+      this.dataUser = navP.get('dataUser');
+      this.dataAuthor = navP.get('dataAuthor');
+      this.dataQuotes = navP.get('dataQuotes');
   }
 
   ionViewDidLoad() {

@@ -15,9 +15,13 @@ import firebase from 'firebase';
 })
 export class SubmitQuote {
 
+  authorInput:any = "";
+
   authorChoice: any = "";
 
   authorData: any = [];
+  
+  authorDataSearch:any = [];
 
   trueOrFalse: any = "";
 
@@ -25,7 +29,15 @@ export class SubmitQuote {
 
   author: any = "";
 
+  newAuthorEntered: boolean = true;
+
   enteredAuthor: any = "";
+
+  authorChosen: boolean = false;
+
+  authorNameTempVar: any = "";
+
+  language: any = "";
 
   quote: any = "";
 
@@ -35,10 +47,18 @@ export class SubmitQuote {
 
   date: any = "";
 
+  buttonDisabledStub: boolean = null;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertController: AlertController) {
   }
 
   ionViewWillEnter() {
+    this.fetchAuthorData();
+  }
+
+  fetchAuthorData(){
+    this.authorData = [];
+    this.authorDataSearch = [];
     firebase.database().ref('authors/').once('value', snapshot => {
       for (let i in snapshot.val()) {
         let tempArray = {
@@ -47,6 +67,7 @@ export class SubmitQuote {
         }
         this.authorData.push(tempArray);
       }
+      this.authorDataSearch = this.authorData;
     })
   }
 
@@ -56,16 +77,18 @@ export class SubmitQuote {
 
   catchEvent() {
 
+    this.buttonDisabledStub = true;
+
     if (!this.checkInputs()) {
-      if (this.checkIfAuthorChosen() != null) {
+      
         if (this.checkIfAuthorChosen()) {
           let data = this.prepareQuoteData();
           let thatIs = this;
           this.insertJSONData('quotes/', data).then(function () {
-            thatIs.showAlert("Erfolg", "Zitat hinzugefügt!");
+            thatIs.showAlert("Erfolg", "Zitat hinzugefügt!", true);
             thatIs.navCtrl.popToRoot();
           }).catch(function () {
-            thatIs.showAlert("Fehlende Angaben", "Zitat konnte nicht hinzugefügt werden. Wir arbeiten dran.");
+            thatIs.showAlert("Fehler", "Zitat konnte nicht hinzugefügt werden. Wir arbeiten dran.", false);
           });
         } else {
           let data = this.prepareAuthorData();
@@ -75,86 +98,57 @@ export class SubmitQuote {
             thatIs.author = authorID;
             let data = thatIs.prepareQuoteData();
             thatIs.insertJSONData('quotes', data).then(function () {
-              thatIs.showAlert("Erfolg", "Zitat mit neuem Autor hinzugefügt!");
+              thatIs.showAlert("Erfolg", "Zitat mit neuem Autor hinzugefügt!", true);
               thatIs.navCtrl.popToRoot();
             })
           })
         }
-      } else {
-        console.log("")
-      }
+      
 
     } else {
-      this.showAlert("Fehlende Angaben", "Nicht alle Felder wurden ausgefüllt. Alle Angaben sind erforderlich.")
+      this.showAlert("Fehlende Angaben", "Nicht alle Felder wurden ausgefüllt. Alle Angaben sind erforderlich.", false)
     }
 
   }
 
   checkInputs() {
 
-    console.log(this.trueOrFalse);
-    console.log(this.category);
-    console.log(this.author);
-    console.log(this.enteredAuthor);
-    console.log(this.quote);
-    console.log(this.context);
-    console.log(this.source);
-    console.log(this.date);
-
-    if (this.authorChoice == "enter") {
-      if (this.trueOrFalse == "" || this.category == 0 || this.enteredAuthor == ""
+    
+      if (this.trueOrFalse == "" || this.category == 0 || this.authorInput == "" || this.language=="" 
         || this.quote == "") {
         return true;
       }else{
         return false;
       }
-    } else if (this.authorChoice == "choose") {
-      if (this.trueOrFalse == "" || this.category == 0 || this.author == ""
-        || this.quote == "") {
-        return true;
-      }else{
-        return false;
-      }
-    } else{
-      return false;
-    }
+   
+    
   }
 
   checkIfAuthorChosen() {
-    if (this.authorChoice == "choose") {
-      return true;
-    } else if (this.authorChoice == "enter") {
+    if(this.newAuthorEntered == true){
       return false;
-    } else {
-      return null;
     }
+    return true;
   }
 
 
 
-  showAlert(title: any, message: any) {
+  showAlert(title: any, message: any, clearInputs: any) {
     let alert = this.alertController.create({
       title: title,
       message: message,
-      buttons: ['OK']
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          this.buttonDisabledStub = null;
+          if(clearInputs){
+          this.clearAndResetInputs();
+          this.fetchAuthorData();
+          }
+        }
+      }]
     });
     alert.present();
-  }
-
-  submitQuote(authorChosen: boolean) {
-
-    if (authorChosen) {
-
-    } else {
-
-    }
-
-    //IN ARBEIT
-
-    return firebase.database().ref('Quoteclub/quotes/').set({
-      category: this.category,
-      quote: this.quote
-    })
   }
 
   prepareQuoteData() {
@@ -164,6 +158,7 @@ export class SubmitQuote {
       real: this.trueOrFalse,
       date: this.date,
       context: this.context,
+      language: this.language,
       source: this.source,
       quote: this.quote
     }
@@ -171,6 +166,7 @@ export class SubmitQuote {
   }
 
   prepareAuthorData() {
+    this.enteredAuthor = this.authorInput;
     let data = {
       name: this.enteredAuthor
     }
@@ -195,5 +191,55 @@ export class SubmitQuote {
 
     return text;
   }
+
+  resetData(){
+    this.authorData = this.authorDataSearch;
+  }
+
+  filterItems(){
+    this.resetData();
+
+    let val = this.authorInput;
+
+    if (val && val.trim() != '') {
+      this.authorData = this.authorData.filter((author) => {
+        return (author.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+
+
+  }
+
+  setAuthor(value:any, authorNameTemp:any){
+    this.author = value;
+    this.authorChosen = true;
+    this.authorNameTempVar = authorNameTemp;
+    this.newAuthorEntered = false;
+  }
+
+  resetAuthorChoice(){
+    this.author = "";
+    this.authorChosen = false;
+    this.authorNameTempVar = "";
+    this.newAuthorEntered = true;
+  }
+
+
+  clearAndResetInputs(){
+    this.newAuthorEntered = true;
+    this.authorInput = "";
+    this.authorChosen = false;
+    this.author = "";
+    this.trueOrFalse = "";
+    this.category = 0;
+    this.enteredAuthor = "";
+    this.authorNameTempVar = "";
+    this.language = "";
+    this.source = "";
+    this.date = "";
+    this.context = "";
+    this.quote = "";
+  }
+
 
 }

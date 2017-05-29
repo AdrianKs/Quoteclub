@@ -12,7 +12,7 @@ export class Game implements OnInit, OnDestroy {
   ready = false;
   attendants = [];
   cardCursor: number = 0;
-  cardDirection = "xy";
+  cardDirection = "x";
   cardOverlay: any = {
     like: {
       backgroundColor: '#28e93b'

@@ -1,6 +1,5 @@
 <!--
   Generated template for the ApproveQuotes page.
-
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
@@ -17,20 +16,47 @@
 <ion-content padding>
 
 <div class="itemLeft">
-    <div class="mainDetails">{{ quoteItem.quote }}</div>
-    <div class="secondaryDetails">{{ quoteItem.author }}</div>
-    <div class="secondaryDetails">{{ quoteItem.category }}</div>
-    <div class="secondaryDetails">{{ quoteItem.context }}</div>
-    <div class="secondaryDetails">{{ quoteItem.date }}</div>
-    <div class="secondaryDetails">{{ quoteItem.language }}</div>
-    <div class="secondaryDetails">{{ quoteItem.real }}</div>
-    <div class="secondaryDetails">{{ quoteItem.source }}</div>
-    <div class="secondaryDetails">{{ quoteItem.user }}</div>
+  <div *ngIf="submittedItem != null">
+    <div class="mainDetails">{{ submittedItem.quote }}</div>
+    <div class="secondaryDetails">Autor: {{ submittedItem.author }}</div>
+    <div *ngFor="let categoryItem of dataCategory">
+      <div *ngIf="categoryItem.id == submittedItem.category" class="secondaryDetails">Kategorie: {{ categoryItem.name }}</div>
+    </div>   
+    <div class="secondaryDetails">Kontext: {{ submittedItem.context }}</div>
+    <div class="secondaryDetails">Datum: {{ submittedItem.date }}</div>
+    <div class="secondaryDetails">Sprache: {{ submittedItem.language }}</div>
+    <div *ngIf="submittedItem.real == true" class="secondaryDetails">Real: Wahr</div>
+    <div *ngIf="submittedItem.real == false" class="secondaryDetails">Real: Falsch</div>
+    <div class="secondaryDetails">Quelle: {{ submittedItem.source }}</div>
+    <div *ngFor="let userItem of dataUser">
+      <div *ngIf="userItem.id == submittedItem.user" class="secondaryDetails">Hochgeladen von: {{userItem.username}}</div>
+    </div>
+  </div>
+  <div *ngIf="reportedItem != null">
+    <div *ngFor="let quoteItem of dataQuotes">
+      <div *ngIf="quoteItem.id == reportedItem.quote">
+        <div class="mainDetails">"{{ quoteItem.quote }}"</div>
+        <div *ngFor="let authorItem of dataAuthor">
+          <div *ngIf="authorItem.id == quoteItem.author" class="secondaryDetails">Autor: {{ authorItem.name }}</div>
+        </div>
+        <div *ngFor="let categoryItem of dataCategory">
+          <div *ngIf="categoryItem.id == quoteItem.category" class="secondaryDetails">Kategorie: {{ categoryItem.name }}</div>
+        </div>  
+        <div class="secondaryDetails">Kontext: {{ quoteItem.context }}</div>
+        <div class="secondaryDetails">Datum: {{ quoteItem.date }}</div>
+        <div class="secondaryDetails">Sprache: {{ quoteItem.language }}</div>
+        <div *ngIf="quoteItem.real == true" class="secondaryDetails">Real: Wahr</div>
+        <div *ngIf="quoteItem.real == false" class="secondaryDetails">Real: Falsch</div>
+        <div class="secondaryDetails">Quelle: {{ quoteItem.source }}</div>
+      </div>
+    </div>
+    <div class="secondaryDetails">Begründung: {{ reportedItem.reason }}</div>
+    <div *ngFor="let userItem of dataUser">
+      <div *ngIf="userItem.id == reportedItem.user" class="secondaryDetails">Gemeldet von: {{userItem.username}}</div>
+    </div>
+  </div>
 </div>
 
-  <ion-refresher (ionRefresh)="loadData(true, event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
 </ion-content>
 
 

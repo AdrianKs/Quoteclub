@@ -32,10 +32,23 @@
 
 .mainDetails {
   color: black;
+  font-weight: bold;
   font-size: 16px;
 }
 
 .secondaryDetails{
   color: dimgrey;
   font-size: 14px;
+}
+
+.firstPlace{
+  background: gold;
+}
+
+.secondPlace{
+  background: silver;
+}
+
+.thirdPlace{
+  background: brown;
 }

@@ -15,6 +15,8 @@ import {Register} from "../pages/register/register";
 import {ResetPassword} from "../pages/reset-password/reset-password";
 import {Settings} from "../pages/settings/settings";
 import {SubmitQuote} from "../pages/submit-quote/submit-quote";
+import { SwipeCardsModule } from "ng2-swipe-cards";
+import { ProgressBar } from "../components/progress-bar/progress-bar";
 
 @NgModule({
   declarations: [
@@ -27,10 +29,12 @@ import {SubmitQuote} from "../pages/submit-quote/submit-quote";
     Register,
     ResetPassword,
     Settings,
-    SubmitQuote
+    SubmitQuote,
+    ProgressBar
   ],
   imports: [
     BrowserModule,
+    SwipeCardsModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],

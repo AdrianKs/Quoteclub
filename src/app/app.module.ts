@@ -9,6 +9,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {Game} from "../pages/game/game";
 import {About} from "../pages/about/about";
 import {ApproveQuotes} from "../pages/approve-quotes/approve-quotes";
+import {QuoteDetail} from "../pages/approve-quotes/quote-detail";
 import {Highscore} from "../pages/highscore/highscore";
 import {Login} from "../pages/login/login";
 import {Register} from "../pages/register/register";
@@ -18,12 +19,15 @@ import {SubmitQuote} from "../pages/submit-quote/submit-quote";
 import { SwipeCardsModule } from "ng2-swipe-cards";
 import { ProgressBar } from "../components/progress-bar/progress-bar";
 
+
+
 @NgModule({
   declarations: [
     MyApp,
     Game,
     About,
     ApproveQuotes,
+    QuoteDetail,
     Highscore,
     Login,
     Register,
@@ -43,6 +47,7 @@ import { ProgressBar } from "../components/progress-bar/progress-bar";
     Game,
     About,
     ApproveQuotes,
+    QuoteDetail,
     Highscore,
     Login,
     Register,

@@ -20,6 +20,7 @@ import { SwipeCardsModule } from "ng2-swipe-cards";
 import { ProgressBar } from "../components/progress-bar/progress-bar";
 
 
+
 @NgModule({
   declarations: [
     MyApp,
